@@ -88,19 +88,23 @@ char	*extract_line(char *line, ssize_t bytes)
 	data = ft_strjoin(data, line);
 	data_len += bytes;
 	free(tmp);
-	free(line);
 	newline_index = find_chr(data, '\n', data_len);
 	if (newline_index < data_len)
 	{
+		tmp = line;
 		line = ft_substr(data, 0, newline_index + 1);
+		free(tmp);
 		tmp = data;
 		data = ft_substr(data, newline_index + 1, data_len - newline_index);
 		data_len = data_len - newline_index - 1;
 		free(tmp);
 		return line;
 	}
-	tmp = data;
-	data = ft_strjoin(data, line);
-	free(tmp);
+	if (newline_index == data_len && bytes == 0)
+	{
+		tmp = data;
+		data = NULL;
+		return tmp;
+	}
 	return (NULL);
 }
