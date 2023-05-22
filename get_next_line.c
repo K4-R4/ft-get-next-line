@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/22 23:24:46 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/23 00:18:17 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,23 @@
 
 char	*get_next_line(int fd)
 {
-	char	*line;
+	char	*ret;
+	char	*buffer;
 	ssize_t	bytes;
 
 	if (fd < 0)
 		return (NULL);
-	line = (char *)malloc(BUFFER_SIZE);
-	if (line == NULL)
+	buffer = (char *)malloc(BUFFER_SIZE);
+	if (buffer == NULL)
 		return (NULL);
-	bytes = read(fd, line, BUFFER_SIZE);
-	while (bytes > 0)
+	bytes = read(fd, buffer, BUFFER_SIZE);
+	ret = extract_line(buffer, bytes);
+	while (bytes > 0 && ret == NULL)
 	{
-		extract_line(line, bytes);
-		bytes = read(fd, line, BUFFER_SIZE);
+		ret = extract_line(buffer, bytes);
+		bytes = read(fd, buffer, BUFFER_SIZE);
 	}
-	return (NULL);
+	return (ret);
 }
 
 #include <fcntl.h>
@@ -36,5 +38,8 @@ char	*get_next_line(int fd)
 int	main(void)
 {
 	int fd = open("sample.txt", O_RDONLY);
-	printf("%s\n", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 }

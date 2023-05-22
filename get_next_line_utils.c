@@ -35,9 +35,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (ret == NULL)
 		return (NULL);
 	tmp = ret;
-	while (*s1 != '\0')
+	while (s1 != NULL && *s1 != '\0')
 		*tmp++ = *s1++;
-	while (*s2 != '\0')
+	while (s2 != NULL && *s2 != '\0')
 		*tmp++ = *s2++;
 	return (ret);
 }
@@ -67,40 +67,40 @@ char	*ft_substr(char const *s, unsigned int start, ssize_t len)
 
 // Returns true when char c is found char *s, otherwise false
 // Update index according to found char c's index
-int	find_chr(char *s, int c, ssize_t bytes, ssize_t *index)
+ssize_t	find_chr(char *s, int c, ssize_t siz)
 {
-	*index = 0;
-	while (bytes-- > 0 && *s != '\0' && *s != c)
-	{
-	printf("==========\n");
-		(*index)++;
-		s++;
-	}
-	return (*s == '\0');
+	ssize_t index;
+
+	index = 0;
+	while (siz-- > 0 && *s++ != c)
+		index++;
+	return index;
 }
 
 char	*extract_line(char *line, ssize_t bytes)
 {
 	static char	*data;
+	static ssize_t		data_len;
 	char		*tmp;
-	ssize_t		*newline_index;
-	ssize_t		*len;
-	int			has_newline;
+	ssize_t		newline_index;
 
-	has_newline = find_chr(line, '\n', bytes, newline_index);
-	find_chr(line, 256, bytes, len);
-	if (has_newline)
+	tmp = data;
+	data = ft_strjoin(data, line);
+	data_len += bytes;
+	free(tmp);
+	free(line);
+	newline_index = find_chr(data, '\n', data_len);
+	if (newline_index < data_len)
 	{
+		line = ft_substr(data, 0, newline_index + 1);
 		tmp = data;
-		data = ft_substr(data, *newline_index, *len - *newline_index);
+		data = ft_substr(data, newline_index + 1, data_len - newline_index);
+		data_len = data_len - newline_index - 1;
 		free(tmp);
-		tmp = ft_strjoin(data, ft_substr(line, 0, *newline_index));
-		free(line);
-		return (tmp);
+		return line;
 	}
 	tmp = data;
 	data = ft_strjoin(data, line);
-	if (data == NULL)
-		return (NULL);
-	return (data);
+	free(tmp);
+	return (NULL);
 }
