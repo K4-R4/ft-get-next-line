@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/23 13:36:28 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:05:31 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_next_line(int fd)
 	return (read_fd(fd));
 }
 
-// call after eof
+// returning empty str after eof
 char	*read_fd(int fd)
 {
 	static char	*remaining_data;
@@ -37,14 +37,12 @@ char	*read_fd(int fd)
 		buffer[bytes] = '\0';
 		remaining_data = ft_strjoin(remaining_data, buffer);
 		newline_index = find_chr(remaining_data, '\n');
-		if (newline_index != find_chr(remaining_data, '\0'))
+		if (newline_index != find_chr(remaining_data, '\0') || bytes == 0)
 			break;
-		// kari
-		if (bytes == 0)
-			return remaining_data;
 	}
 	// split func
 	ret = ft_substr(remaining_data, 0, newline_index + 1);
+	// printf("%lu %lu\n", newline_index, find_chr(remaining_data, '\0'));
 	remaining_data = ft_substr(remaining_data, newline_index + 1,
 			find_chr(remaining_data, '\0'));
 	return ret;

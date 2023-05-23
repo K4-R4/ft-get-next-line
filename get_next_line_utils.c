@@ -37,6 +37,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		*tmp++ = *s1++;
 	while (s2 != NULL && *s2 != '\0')
 		*tmp++ = *s2++;
+	*tmp = '\0';
 	return (ret);
 }
 
@@ -68,7 +69,7 @@ ssize_t	find_chr(char *s, char c)
 	ssize_t index;
 
 	index = 0;
-	while (*s != '\0' && *s++ != c)
+	while (s != NULL && *s != '\0' && *s++ != c)
 		index++;
 	return index;
 }

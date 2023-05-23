@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/23 13:29:51 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:09:31 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 # include <sys/uio.h>
 # include <unistd.h>
 
-# ifndef BUFFER_SIZE
+# if !BUFFER_SIZE || BUFFER_SIZE <= 0
+#  undef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
 # endif
 
