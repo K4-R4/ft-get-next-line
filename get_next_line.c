@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 08:19:30 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 08:33:43 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	*read_fd(int fd)
 {
 	static char	*remains;
 	char		*buffer;
+	char		*tmp;
 	ssize_t		bytes;
 	ssize_t		newline_idx;
 
@@ -33,13 +34,16 @@ char	*read_fd(int fd)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes] = '\0';
+		tmp = remains;
 		remains = ft_strjoin(remains, buffer);
+		free(tmp);
 		if (remains == NULL)
 			return (NULL);
 		newline_idx = find_chr(remains, '\n');
 		if (newline_idx != find_chr(remains, '\0') || bytes == 0)
 			break ;
 	}
+	free(buffer);
 	return (split_remains_with_first_newline(&remains, newline_idx));
 }
 
@@ -70,8 +74,12 @@ char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
 int	main(void)
 {
 	int fd = open("sample.txt", O_RDONLY);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
+	int n = 10;
+	for (int i = 0; i < n; i++)
+		printf("%s", get_next_line(fd));
+}
+
+__attribute__((destructor)) static void destructor()
+{
+    system("leaks -q a.out");
 }
