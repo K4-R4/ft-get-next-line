@@ -16,10 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
-	if (s == NULL)
-		return (0);
 	len = 0;
-	while (*s++ != '\0')
+	while (s != NULL && *s++ != '\0')
 		len++;
 	return (len);
 }
@@ -65,46 +63,12 @@ char	*ft_substr(char const *s, unsigned int start, ssize_t len)
 	return (ret);
 }
 
-// Returns true when char c is found char *s, otherwise false
-// Update index according to found char c's index
-ssize_t	find_chr(char *s, int c, ssize_t siz)
+ssize_t	find_chr(char *s, char c)
 {
 	ssize_t index;
 
 	index = 0;
-	while (siz-- > 0 && *s++ != c)
+	while (*s != '\0' && *s++ != c)
 		index++;
 	return index;
-}
-
-char	*extract_line(char *line, ssize_t bytes)
-{
-	static char	*data;
-	static ssize_t		data_len;
-	char		*tmp;
-	ssize_t		newline_index;
-
-	tmp = data;
-	data = ft_strjoin(data, line);
-	data_len += bytes;
-	free(tmp);
-	newline_index = find_chr(data, '\n', data_len);
-	if (newline_index < data_len)
-	{
-		tmp = line;
-		line = ft_substr(data, 0, newline_index + 1);
-		free(tmp);
-		tmp = data;
-		data = ft_substr(data, newline_index + 1, data_len - newline_index);
-		data_len = data_len - newline_index - 1;
-		free(tmp);
-		return line;
-	}
-	if (newline_index == data_len && bytes == 0)
-	{
-		tmp = data;
-		data = NULL;
-		return tmp;
-	}
-	return (NULL);
 }
