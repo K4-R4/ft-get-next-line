@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/23 22:05:31 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 08:19:30 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,12 @@ char	*get_next_line(int fd)
 	return (read_fd(fd));
 }
 
-// returning empty str after eof
 char	*read_fd(int fd)
 {
-	static char	*remaining_data;
+	static char	*remains;
 	char		*buffer;
-	char		*ret;
 	ssize_t		bytes;
-	ssize_t		newline_index;
+	ssize_t		newline_idx;
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (buffer == NULL)
@@ -35,17 +33,36 @@ char	*read_fd(int fd)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes] = '\0';
-		remaining_data = ft_strjoin(remaining_data, buffer);
-		newline_index = find_chr(remaining_data, '\n');
-		if (newline_index != find_chr(remaining_data, '\0') || bytes == 0)
-			break;
+		remains = ft_strjoin(remains, buffer);
+		if (remains == NULL)
+			return (NULL);
+		newline_idx = find_chr(remains, '\n');
+		if (newline_idx != find_chr(remains, '\0') || bytes == 0)
+			break ;
 	}
-	// split func
-	ret = ft_substr(remaining_data, 0, newline_index + 1);
-	// printf("%lu %lu\n", newline_index, find_chr(remaining_data, '\0'));
-	remaining_data = ft_substr(remaining_data, newline_index + 1,
-			find_chr(remaining_data, '\0'));
-	return ret;
+	return (split_remains_with_first_newline(&remains, newline_idx));
+}
+
+// Pass in whole string as remains,
+// splitting it with first occurrence of newline and
+// returns first part and update remains
+char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
+{
+	char	*ret;
+	char	*tmp;
+
+	if (newline_idx == 0 && find_chr(*remains, '\0') == 0)
+	{
+		free(*remains);
+		return (NULL);
+	}
+	ret = ft_substr(*remains, 0, newline_idx + 1);
+	tmp = *remains;
+	*remains = ft_substr(*remains, newline_idx + 1, find_chr(*remains, '\0'));
+	free(tmp);
+	if (ret == NULL || *remains == NULL)
+		return (NULL);
+	return (ret);
 }
 
 #include <fcntl.h>

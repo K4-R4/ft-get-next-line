@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/23 22:09:31 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 08:07:03 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # endif
 
 char	*read_fd(int fd);
+char	*split_remains_with_first_newline(char **remains, ssize_t newline_index);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, unsigned int start, ssize_t len);
