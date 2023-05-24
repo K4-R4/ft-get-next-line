@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 08:07:03 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:34:12 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@
 # include <sys/uio.h>
 # include <unistd.h>
 
-# if !BUFFER_SIZE || BUFFER_SIZE <= 0
+# if !BUFFER_SIZE || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX
 #  undef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
 # endif
 
+
+char	*get_next_line(int fd);
 char	*read_fd(int fd);
-char	*split_remains_with_first_newline(char **remains, ssize_t newline_index);
+char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, unsigned int start, ssize_t len);

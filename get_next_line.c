@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 14:11:16 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:41:07 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,19 @@ char	*get_next_line(int fd)
 	return (read_fd(fd));
 }
 
-// free static remains initialized with null ??
 char	*read_fd(int fd)
 {
 	static char	*remains;
-	char		*buffer;
+	char		buffer[BUFFER_SIZE + 1];
 	char		*tmp;
 	ssize_t		bytes;
 	ssize_t		newline_idx;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if (buffer == NULL)
-		return (NULL);
 	while (1)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes < 0)
+			return (NULL);
 		buffer[bytes] = '\0';
 		tmp = remains;
 		remains = ft_strjoin(remains, buffer);
@@ -45,7 +43,6 @@ char	*read_fd(int fd)
 		if (newline_idx != find_chr(remains, '\0') || bytes == 0)
 			break ;
 	}
-	free(buffer);
 	return (split_remains_with_first_newline(&remains, newline_idx));
 }
 
@@ -79,7 +76,7 @@ char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
 int	main(void)
 {
 	int fd = open("sample.txt", O_RDONLY);
-	int n = 10;
+	int n = 2;
 	for (int i = 0; i < n; i++)
 	{
 		char *s = get_next_line(fd);
