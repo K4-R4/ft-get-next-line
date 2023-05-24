@@ -66,10 +66,10 @@ char	*ft_substr(char const *s, unsigned int start, ssize_t len)
 
 ssize_t	find_chr(char *s, char c)
 {
-	ssize_t index;
+	ssize_t	index;
 
 	index = 0;
 	while (s != NULL && *s != '\0' && *s++ != c)
 		index++;
-	return index;
+	return (index);
 }

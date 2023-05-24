@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 13:52:42 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:11:16 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*read_fd(int fd)
 	ssize_t		bytes;
 	ssize_t		newline_idx;
 
-	printf("%p\n", remains);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
@@ -38,10 +37,10 @@ char	*read_fd(int fd)
 		buffer[bytes] = '\0';
 		tmp = remains;
 		remains = ft_strjoin(remains, buffer);
-		if (tmp != NULL)
-			free(tmp);
 		if (remains == NULL)
 			return (NULL);
+		if (tmp != NULL)
+			free(tmp);
 		newline_idx = find_chr(remains, '\n');
 		if (newline_idx != find_chr(remains, '\0') || bytes == 0)
 			break ;
@@ -61,12 +60,12 @@ char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
 	if (newline_idx == 0 && find_chr(*remains, '\0') == 0)
 	{
 		free(*remains);
+		*remains = NULL;
 		return (NULL);
 	}
 	ret = ft_substr(*remains, 0, newline_idx + 1);
 	if (ret == NULL)
 		return (NULL);
-	printf("====%p====\n", ret);
 	tmp = *remains;
 	*remains = ft_substr(*remains, newline_idx + 1, find_chr(*remains, '\0'));
 	if (*remains == NULL)
