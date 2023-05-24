@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 08:33:43 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/24 08:46:25 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*get_next_line(int fd)
 	return (read_fd(fd));
 }
 
+// free static remains initialized with null ??
 char	*read_fd(int fd)
 {
 	static char	*remains;
@@ -61,11 +62,14 @@ char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
 		return (NULL);
 	}
 	ret = ft_substr(*remains, 0, newline_idx + 1);
+	if (ret == NULL)
+		return (NULL);
+	printf("====%p====\n", ret);
 	tmp = *remains;
 	*remains = ft_substr(*remains, newline_idx + 1, find_chr(*remains, '\0'));
-	free(tmp);
-	if (ret == NULL || *remains == NULL)
+	if (*remains == NULL)
 		return (NULL);
+	free(tmp);
 	return (ret);
 }
 
@@ -76,7 +80,11 @@ int	main(void)
 	int fd = open("sample.txt", O_RDONLY);
 	int n = 10;
 	for (int i = 0; i < n; i++)
-		printf("%s", get_next_line(fd));
+	{
+		char *s = get_next_line(fd);
+		printf("%s", s);
+		free(s);
+	}
 }
 
 __attribute__((destructor)) static void destructor()
