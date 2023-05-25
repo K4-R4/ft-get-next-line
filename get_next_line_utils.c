@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:46:36 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/25 23:07:00 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:36:57 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n1, size_t n2)
 {
-	size_t	n1;
-	size_t	n2;
 	size_t	dstsize;
 	char	*ret;
 	char	*tmp;
@@ -57,13 +55,16 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t n1, size_t n2)
 
 char	*ft_strdup(const char *s1)
 {
-	char	*temp;
+	char	*ret;
+	char	*tmp;
 	size_t	len;
 
 	len = ft_strlen(s1);
-	temp = (char *)malloc(sizeof(char) * (len + 1));
-	if (temp == NULL)
+	ret = (char *)malloc(sizeof(char) * (len + 1));
+	if (ret == NULL)
 		return (NULL);
-	ft_strlcpy(temp, s1, len + 1);
-	return (temp);
+	tmp = ret;
+	while (*s1++)
+		*tmp++ = *s1++;
+	return (ret);
 }

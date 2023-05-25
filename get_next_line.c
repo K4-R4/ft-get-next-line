@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/25 23:33:29 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:54:21 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_next_line(int fd)
 {
-	int			ok;
+	int			flag;
 	ssize_t		n;
 	char		buffer[BUFFER_SIZE + 1];
 	static char	*rest[MAX_FD];
@@ -26,13 +26,13 @@ char	*get_next_line(int fd)
 		return (NULL);
 	*line = '\0';
 	if (rest[fd])
-		ok = concat_line(&line, buffer, &rest[fd]);
+		flag = concat_line(&line, buffer, &rest[fd]);
 	while (1)
 	{
 		n = read(fd, buffer, BUFFER_SIZE);
 		buffer[n] = '\0';
-		ok = concat_line(&line, &buffer, &rest[fd]);
-		if (ok || n <= 0)
+		flag = concat_line(&line, buffer, &rest[fd]);
+		if (flag || n <= 0)
 			break ;
 	}
 	return (line);
@@ -46,8 +46,8 @@ int	concat_line(char **line, char *buffer, char **rest)
 	char	*tmp;
 	size_t	n;
 
-	n = find_chr(*buffer, '\n');
-	tmp = ft_strnjoin(*line, *buffer, ft_strlen(*line), n);
+	n = find_chr(buffer, '\n');
+	tmp = ft_strnjoin(*line, buffer, ft_strlen(*line), n);
 	if (!tmp)
 		return (-1);
 	free(*line);
@@ -66,23 +66,23 @@ int	concat_line(char **line, char *buffer, char **rest)
 	return (flag);
 }
 
-// #include <fcntl.h>
+#include <fcntl.h>
 
-// int	main(void)
-// {
-// 	int		fd;
-// 	int		n;
-// 	char	*s;
+int	main(void)
+{
+	int		fd;
+	int		n;
+	char	*s;
 
-// 	fd = open("sample.txt", O_RDONLY);
-// 	n = 2;
-// 	for (int i = 0; i < n; i++)
-// 	{
-// 		s = get_next_line(fd);
-// 		printf("%s", s);
-// 		free(s);
-// 	}
-// }
+	fd = open("sample.txt", O_RDONLY);
+	n = 10;
+	for (int i = 0; i < n; i++)
+	{
+		s = get_next_line(fd);
+		printf("%s", s);
+		free(s);
+	}
+}
 
 // __attribute__((destructor)) static void destructor()
 // {
