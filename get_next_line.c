@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 16:41:07 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:33:29 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,76 +14,75 @@
 
 char	*get_next_line(int fd)
 {
-	if (fd < 0)
-		return (NULL);
-	return (read_fd(fd));
-}
-
-char	*read_fd(int fd)
-{
-	static char	*remains;
+	int			ok;
+	ssize_t		n;
 	char		buffer[BUFFER_SIZE + 1];
-	char		*tmp;
-	ssize_t		bytes;
-	ssize_t		newline_idx;
+	static char	*rest[MAX_FD];
+	char		*line;
 
+	buffer[0] = '\0';
+	line = (char *)malloc(sizeof(char) * 1);
+	if (!line)
+		return (NULL);
+	*line = '\0';
+	if (rest[fd])
+		ok = concat_line(&line, buffer, &rest[fd]);
 	while (1)
 	{
-		bytes = read(fd, buffer, BUFFER_SIZE);
-		if (bytes < 0)
-			return (NULL);
-		buffer[bytes] = '\0';
-		tmp = remains;
-		remains = ft_strjoin(remains, buffer);
-		if (remains == NULL)
-			return (NULL);
-		if (tmp != NULL)
-			free(tmp);
-		newline_idx = find_chr(remains, '\n');
-		if (newline_idx != find_chr(remains, '\0') || bytes == 0)
+		n = read(fd, buffer, BUFFER_SIZE);
+		buffer[n] = '\0';
+		ok = concat_line(&line, &buffer, &rest[fd]);
+		if (ok || n <= 0)
 			break ;
 	}
-	return (split_remains_with_first_newline(&remains, newline_idx));
+	return (line);
 }
 
-// Pass in whole string as remains,
-// splitting it with first occurrence of newline and
-// returns first part and update remains
-char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx)
+// Returns 1 when strings are successfully concatinated,
+// -1 when an error occurs, 0 when line has no nl
+int	concat_line(char **line, char *buffer, char **rest)
 {
-	char	*ret;
+	int		flag;
 	char	*tmp;
+	size_t	n;
 
-	if (newline_idx == 0 && find_chr(*remains, '\0') == 0)
+	n = find_chr(*buffer, '\n');
+	tmp = ft_strnjoin(*line, *buffer, ft_strlen(*line), n);
+	if (!tmp)
+		return (-1);
+	free(*line);
+	*line = tmp;
+	tmp = NULL;
+	flag = 0;
+	if (buffer[n] == '\n')
 	{
-		free(*remains);
-		*remains = NULL;
-		return (NULL);
+		tmp = ft_strdup(buffer + n + 1);
+		if (!tmp)
+			return (-1);
+		flag = 1;
 	}
-	ret = ft_substr(*remains, 0, newline_idx + 1);
-	if (ret == NULL)
-		return (NULL);
-	tmp = *remains;
-	*remains = ft_substr(*remains, newline_idx + 1, find_chr(*remains, '\0'));
-	if (*remains == NULL)
-		return (NULL);
-	free(tmp);
-	return (ret);
+	free(*rest);
+	*rest = tmp;
+	return (flag);
 }
 
-#include <fcntl.h>
+// #include <fcntl.h>
 
-int	main(void)
-{
-	int fd = open("sample.txt", O_RDONLY);
-	int n = 2;
-	for (int i = 0; i < n; i++)
-	{
-		char *s = get_next_line(fd);
-		printf("%s", s);
-		free(s);
-	}
-}
+// int	main(void)
+// {
+// 	int		fd;
+// 	int		n;
+// 	char	*s;
+
+// 	fd = open("sample.txt", O_RDONLY);
+// 	n = 2;
+// 	for (int i = 0; i < n; i++)
+// 	{
+// 		s = get_next_line(fd);
+// 		printf("%s", s);
+// 		free(s);
+// 	}
+// }
 
 // __attribute__((destructor)) static void destructor()
 // {

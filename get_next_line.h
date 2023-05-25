@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/24 16:34:12 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:13:59 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@
 #  define BUFFER_SIZE 4096
 # endif
 
+# if !MAX_FD || MAX_FD <= 0 || MAX_FD > INT_MAX
+#  undef MAX_FD
+#  define MAX_FD 256
+# endif
 
 char	*get_next_line(int fd);
-char	*read_fd(int fd);
-char	*split_remains_with_first_newline(char **remains, ssize_t newline_idx);
+int		concat_line(char **line, char *buffer, char **rest);
+size_t	find_chr(char *s, char c);
 size_t	ft_strlen(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, ssize_t len);
-ssize_t	find_chr(char *s, char c);
+char	*ft_strnjoin(char const *s1, char const *s2, size_t n1, size_t n2);
+char	*ft_strdup(const char *s1);
 
 #endif
