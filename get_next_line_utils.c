@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:46:36 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/25 23:36:57 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:06:33 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	find_chr(char *s, char c)
 	size_t	idx;
 
 	idx = 0;
-	while (*s++ && *s != c)
+	while (*s && *s++ != c)
 		idx++;
 	return (idx);
 }
@@ -64,7 +64,8 @@ char	*ft_strdup(const char *s1)
 	if (ret == NULL)
 		return (NULL);
 	tmp = ret;
-	while (*s1++)
+	while (*s1)
 		*tmp++ = *s1++;
+	*tmp = '\0';
 	return (ret);
 }
