@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 17:25:08 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:33:01 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	handle_error(char **line, ssize_t n, int flag)
 }
 
 // #include <fcntl.h>
+// #include <stdio.h>
 
 // int	main(void)
 // {

@@ -6,15 +6,13 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 17:13:20 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:29:50 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-// For debug
-# include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/uio.h>
@@ -22,7 +20,7 @@
 
 # if !BUFFER_SIZE || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX
 #  undef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 4096
 # endif
 
 # if !MAX_FD || MAX_FD <= 0 || MAX_FD > INT_MAX
