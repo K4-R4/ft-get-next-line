@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 17:35:54 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:43:01 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,22 @@ void	handle_error(char **line, ssize_t n, int flag)
 
 // int	main(void)
 // {
-// 	int		fd;
+// 	int		fd1;
+// 	int		fd2;
 // 	int		n;
 // 	char	*s;
 
-// 	fd = open("sample1.txt", O_RDONLY);
+// 	fd1 = open("sample4.tx", O_RDONLY);
+// 	fd2 = open("sample5.tx", O_RDONLY);
 // 	n = 20;
 // 	for (int i = 0; i < n; i++)
 // 	{
-// 		printf("============%d\n", i);
-// 		s = get_next_line(fd);
+// 		printf("============%d\n", fd1);
+// 		s = get_next_line(fd1);
+// 		printf("%s", s);
+// 		free(s);
+// 		printf("============%d\n", fd2);
+// 		s = get_next_line(fd2);
 // 		printf("%s", s);
 // 		free(s);
 // 	}
