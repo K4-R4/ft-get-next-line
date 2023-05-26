@@ -6,12 +6,13 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 12:35:42 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:35:34 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// n, flag
 char	*get_next_line(int fd)
 {
 	int			flag;
@@ -20,6 +21,8 @@ char	*get_next_line(int fd)
 	static char	*rest[MAX_FD];
 	char		*line;
 
+	if (fd < 0 || fd >= MAX_FD)
+		return (NULL);
 	buffer[0] = '\0';
 	line = (char *)malloc(sizeof(char) * 1);
 	if (!line)
@@ -31,16 +34,15 @@ char	*get_next_line(int fd)
 	while (!flag)
 	{
 		n = read(fd, buffer, BUFFER_SIZE);
-		if (n <= 0)
+		if (is_eof(&line, n) || n <= 0)
 			break ;
 		buffer[n] = '\0';
 		flag = concat_line(&line, buffer, &rest[fd]);
 	}
+	handle_error(&line, n, flag);
 	return (line);
 }
 
-// 引数で読み込んだバイト数を取る
-// eof, エラーが生じた時にlineをfreeしたのちNULLにする
 // Returns 1 when strings are successfully concatinated,
 // -1 when an error occurs, 0 when line has no nl
 int	concat_line(char **line, char *buffer, char **rest)
@@ -49,6 +51,7 @@ int	concat_line(char **line, char *buffer, char **rest)
 	char	*tmp;
 	size_t	n;
 
+	flag = 0;
 	n = find_chr(buffer, '\n');
 	tmp = ft_strnjoin(*line, buffer, ft_strlen(*line), n + 1);
 	if (!tmp)
@@ -56,7 +59,6 @@ int	concat_line(char **line, char *buffer, char **rest)
 	free(*line);
 	*line = tmp;
 	tmp = NULL;
-	flag = 0;
 	if (buffer[n] == '\n')
 	{
 		tmp = ft_strdup(buffer + n + 1);
@@ -69,24 +71,44 @@ int	concat_line(char **line, char *buffer, char **rest)
 	return (flag);
 }
 
-#include <fcntl.h>
-
-int	main(void)
+int	is_eof(char **line, ssize_t n)
 {
-	int		fd;
-	int		n;
-	char	*s;
-
-	fd = open("sample.txt", O_RDONLY);
-	n = 20;
-	for (int i = 0; i < n; i++)
+	if (!ft_strlen(*line) && !n)
 	{
-		printf("============%d\n", i);
-		s = get_next_line(fd);
-		printf("%s", s);
-		free(s);
+		free(*line);
+		*line = NULL;
+		return (1);
+	}
+	return (0);
+}
+
+void	handle_error(char **line, ssize_t n, int flag)
+{
+	if (n < 0 || flag == -1)
+	{
+		free(*line);
+		*line = NULL;
 	}
 }
+
+// #include <fcntl.h>
+
+// int	main(void)
+// {
+// 	int		fd;
+// 	int		n;
+// 	char	*s;
+
+// 	fd = open("sample1.txt", O_RDONLY);
+// 	n = 20;
+// 	for (int i = 0; i < n; i++)
+// 	{
+// 		printf("============%d\n", i);
+// 		s = get_next_line(fd);
+// 		printf("%s", s);
+// 		free(s);
+// 	}
+// }
 
 // __attribute__((destructor)) static void destructor()
 // {

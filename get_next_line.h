@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:55 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/25 23:13:59 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:32:50 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@
 
 # if !BUFFER_SIZE || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX
 #  undef BUFFER_SIZE
-#  define BUFFER_SIZE 4096
+#  define BUFFER_SIZE 1
 # endif
 
 # if !MAX_FD || MAX_FD <= 0 || MAX_FD > INT_MAX
 #  undef MAX_FD
-#  define MAX_FD 256
+#  define MAX_FD 24576
 # endif
 
 char	*get_next_line(int fd);
 int		concat_line(char **line, char *buffer, char **rest);
+void	handle_error(char **line, ssize_t n, int flag);
+int		is_eof(char **line, ssize_t n);
 size_t	find_chr(char *s, char c);
 size_t	ft_strlen(const char *s);
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n1, size_t n2);

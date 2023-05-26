@@ -2,4 +2,4 @@ venv
 gnl-tester-tokyo
 gnlTester
 a.out
-sample.txt
+sample*.txt

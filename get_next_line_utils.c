@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:46:36 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 10:06:33 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 14:48:26 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ size_t	find_chr(char *s, char c)
 	return (idx);
 }
 
+// Nullproof
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
 	len = 0;
-	while (*s++)
+	while (s && *s++)
 		len++;
 	return (len);
 }
