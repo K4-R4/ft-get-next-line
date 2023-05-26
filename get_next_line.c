@@ -6,13 +6,12 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 16:35:34 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:25:08 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// n, flag
 char	*get_next_line(int fd)
 {
 	int			flag;
@@ -23,7 +22,6 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	buffer[0] = '\0';
 	line = (char *)malloc(sizeof(char) * 1);
 	if (!line)
 		return (NULL);
