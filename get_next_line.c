@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:12:21 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/27 18:12:26 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/27 18:27:51 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	concat_line(char **line, char *buffer, char **rest)
 // 	for (int i = 0; i < n; i++)
 // 	{
 // 		printf("============%d\n", i);
-// 		s = get_next_line(fd);
+// 		s = get_next_line(2);
 // 		printf("%s", s);
 // 		free(s);
 // 	}
