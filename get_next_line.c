@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 16:05:52 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 17:33:01 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:33:09y tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 char	*get_next_line(int fd)
 {
 	int			flag;
-	ssize_t		n;
-	char		buffer[BUFFER_SIZE + 1];
-	static char	*rest[MAX_FD];
+	static char	*rest[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || fd >= MAX_FD)
+	if (fd < 0 || fd >= OPEN_MAX)
 		return (NULL);
 	line = (char *)malloc(sizeof(char) * 1);
 	if (!line)
@@ -29,20 +27,38 @@ char	*get_next_line(int fd)
 	flag = 0;
 	if (rest[fd])
 		flag = concat_line(&line, rest[fd], &rest[fd]);
+	if (flag)
+		return (line);
+	return (read_new_line(fd, line, rest));
+}
+
+char	*read_new_line(int fd, char *line, char **rest)
+{
+	int		flag;
+	ssize_t	n;
+	char	*buffer;
+
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	flag = 0;
 	while (!flag)
 	{
 		n = read(fd, buffer, BUFFER_SIZE);
-		if (is_eof(&line, n) || n <= 0)
+		if (n <= 0)
 			break ;
 		buffer[n] = '\0';
 		flag = concat_line(&line, buffer, &rest[fd]);
 	}
-	handle_error(&line, n, flag);
+	if ((!ft_strlen(line) && !n) || n < 0)
+	{
+		free(line);
+		line = NULL;
+	}
+	free(buffer);
 	return (line);
 }
 
-// Returns 1 when strings are successfully concatinated,
-// -1 when an error occurs, 0 when line has no nl
 int	concat_line(char **line, char *buffer, char **rest)
 {
 	int		flag;
@@ -53,40 +69,20 @@ int	concat_line(char **line, char *buffer, char **rest)
 	n = find_chr(buffer, '\n');
 	tmp = ft_strnjoin(*line, buffer, ft_strlen(*line), n + 1);
 	if (!tmp)
-		return (-1);
+		return (1);
 	free(*line);
 	*line = tmp;
 	tmp = NULL;
 	if (buffer[n] == '\n')
 	{
+		flag = 1;
 		tmp = ft_strdup(buffer + n + 1);
 		if (!tmp)
-			return (-1);
-		flag = 1;
+			return (1);
 	}
 	free(*rest);
 	*rest = tmp;
 	return (flag);
-}
-
-int	is_eof(char **line, ssize_t n)
-{
-	if (!ft_strlen(*line) && !n)
-	{
-		free(*line);
-		*line = NULL;
-		return (1);
-	}
-	return (0);
-}
-
-void	handle_error(char **line, ssize_t n, int flag)
-{
-	if (n < 0 || flag == -1)
-	{
-		free(*line);
-		*line = NULL;
-	}
 }
 
 // #include <fcntl.h>
@@ -98,7 +94,7 @@ void	handle_error(char **line, ssize_t n, int flag)
 // 	int		n;
 // 	char	*s;
 
-// 	fd = open("sample1.txt", O_RDONLY);
+// 	fd = open("sample0.txt", O_RDONLY);
 // 	n = 20;
 // 	for (int i = 0; i < n; i++)
 // 	{
@@ -111,5 +107,5 @@ void	handle_error(char **line, ssize_t n, int flag)
 
 // __attribute__((destructor)) static void destructor()
 // {
-//     system("leaks -q a.out");
+// 	system("leaks -q a.out");
 // }
