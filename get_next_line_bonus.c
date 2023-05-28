@@ -6,11 +6,14 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:11:56 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/27 18:26:58 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:11:51 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+static char	*read_new_line(int fd, char *line, char **rest);
+static int	concat_line(char **line, char *buffer, char **rest);
 
 char	*get_next_line(int fd)
 {
@@ -32,7 +35,7 @@ char	*get_next_line(int fd)
 	return (read_new_line(fd, line, rest));
 }
 
-char	*read_new_line(int fd, char *line, char **rest)
+static char	*read_new_line(int fd, char *line, char **rest)
 {
 	int		flag;
 	ssize_t	n;
@@ -50,7 +53,7 @@ char	*read_new_line(int fd, char *line, char **rest)
 		buffer[n] = '\0';
 		flag = concat_line(&line, buffer, &rest[fd]);
 	}
-	if ((!ft_strlen(line) && !n) || n < 0)
+	if ((!ft_strlen_s(line) && !n) || n < 0)
 	{
 		free(line);
 		line = NULL;
@@ -59,7 +62,7 @@ char	*read_new_line(int fd, char *line, char **rest)
 	return (line);
 }
 
-int	concat_line(char **line, char *buffer, char **rest)
+static int	concat_line(char **line, char *buffer, char **rest)
 {
 	int		flag;
 	char	*tmp;
@@ -67,7 +70,7 @@ int	concat_line(char **line, char *buffer, char **rest)
 
 	flag = 0;
 	n = find_chr(buffer, '\n');
-	tmp = ft_strnjoin(*line, buffer, ft_strlen(*line), n + 1);
+	tmp = ft_strnjoin(*line, buffer, ft_strlen_s(*line), n + 1);
 	if (!tmp)
 		return (1);
 	free(*line);

@@ -6,7 +6,7 @@
 /*   By: tkuramot <tkuramot@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 22:46:36 by tkuramot          #+#    #+#             */
-/*   Updated: 2023/05/26 14:48:26 by tkuramot         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:08:21 by tkuramot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	find_chr(char *s, char c)
 }
 
 // Nullproof
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen_s(const char *s)
 {
 	size_t	len;
 
@@ -60,7 +60,7 @@ char	*ft_strdup(const char *s1)
 	char	*tmp;
 	size_t	len;
 
-	len = ft_strlen(s1);
+	len = ft_strlen_s(s1);
 	ret = (char *)malloc(sizeof(char) * (len + 1));
 	if (ret == NULL)
 		return (NULL);
