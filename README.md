@@ -8,5 +8,5 @@ char *get_next_line(int fd)
 ```bash
 git clone https://github.com/K4-R4/get-next-line
 cd get-next-line
-make
+cc get_next_line.c get_next_line_utils.c -D BUFFER_SIZE=1024
 ```
